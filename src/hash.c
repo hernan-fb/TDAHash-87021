@@ -71,7 +71,8 @@ hash_t *hash_crear(size_t capacidad)
 	if (hash == NULL) {
 		return NULL;
 	}
-	hash->tamanio = CAPACIDAD_INICIAL_TABLA_HASH;
+	hash->tamanio = capacidad < 3 ? CAPACIDAD_INICIAL_TABLA_HASH :
+					capacidad;
 	hash->cantidad = 0;
 	hash->tabla = calloc(sizeof(lista_t *), CAPACIDAD_INICIAL_TABLA_HASH);
 
@@ -79,8 +80,12 @@ hash_t *hash_crear(size_t capacidad)
 		free(hash);
 		return NULL;
 	}
-	for (size_t i = 0; i < hash->tamanio; hash->tabla[i++] = lista_crear())
-		;
+	for (size_t i = 0; i < hash->tamanio; ++i) {
+		hash->tabla[i] = lista_crear();
+	}
+	for (size_t i = 0; i < hash->tamanio; i++) {
+		printf("lista creada, pos i: %zu, lista->tam: %zu\n", i, hash->tabla[i]->tam);
+	}
 
 	return hash;
 }
@@ -234,19 +239,25 @@ void hash_destruir_todo(hash_t *hash, void (*destructor)(void *))
 	if (!hash)
 		return;
 	lista_t *bucket;
+	printf("leeA\n");
 	for (size_t i = 0; i < hash->tamanio; i++) {
 		bucket = hash->tabla[i];
+		printf("leeB\n");
 		lista_iterador_t *iter = lista_iterador_crear(bucket);
 		while (lista_iterador_tiene_siguiente(iter)) {
+			printf("leeC %s\n", lista_iterador_tiene_siguiente(iter)?"true":"false");
 			clave_valor_t *clave_valor =
 				lista_iterador_borrar(iter);
+			printf("clave_valor: %p\n", (void*)clave_valor);
 			if (destructor)
 				destructor(clave_valor->valor);
-			destruir_estructura_clave_pero_no_el_valor(clave_valor);
+			if (clave_valor) destruir_estructura_clave_pero_no_el_valor(clave_valor);
 		}
+		printf("leeD\n");
 		lista_iterador_destruir(iter);
 		lista_destruir(bucket);
 	}
+	printf("leeE\n");
 	free(hash->tabla);
 	free(hash);
 }

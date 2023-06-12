@@ -48,13 +48,14 @@ struct lista_iterador {
 
 lista_t *lista_crear()
 {
-	lista_t *listita = malloc(sizeof(lista_t));
+	lista_t *listita = calloc(1, sizeof(lista_t));
 	if (!listita) {
 		return NULL;
 	}
 	listita->primero = NULL;
 	listita->ultimo = NULL;
 	listita->tam = 0;
+	printf("creada lista con tamanio: %zu\n", listita->tam);
 	return listita;
 }
 
@@ -240,6 +241,7 @@ bool lista_vacia(lista_t *lista)
 	if (!lista) {
 		return true;
 	}
+	printf("lista tam: %zu\n", lista->tam);
 	return (lista->tam == 0);
 }
 
@@ -289,6 +291,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 	if (!iter_externo) {
 		return NULL;
 	}
+	printf("lista vacía al crear iterador? : %s, lista->tam: %zu\n", lista_vacia(lista)?"true":"false", lista->tam);
 	if (lista_vacia(lista)) {
 		iter_externo->actual = NULL;
 	} else {
@@ -301,6 +304,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
+	printf("listavacia es %s\n",lista_vacia(iterador->lista)?"true":"false");
 	if (!iterador || lista_vacia(iterador->lista)) {
 		return false;
 	}
