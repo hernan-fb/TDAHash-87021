@@ -237,38 +237,38 @@ size_t hash_con_cada_clave(hash_t *hash,
   if (!hash || !f)
     return n;
   lista_t *bucket;
-  printf("iterador interno\n");
-  size_t borrar_este_contador = 0;
-  for (size_t i = 0; i < hash->tamanio; i++) {
+  // ACAprintf("iterador interno\n");
+  // ACAsize_t borrar_este_contador = 0;
+  bool resultado_de_funcion = true;
+  for (size_t i = 0; i < hash->tamanio && resultado_de_funcion; i++) {
     bucket = hash->tabla[i];
     lista_iterador_t *iter = lista_iterador_crear(bucket);
-    printf("asdf0\n");
+    // ACAprintf("asdf0\n");
     while (lista_iterador_tiene_siguiente(iter)) {
-      printf("asdf1\n");
+      // ACAprintf("asdf1\n");
       clave_valor_t *clave_valor = lista_iterador_elemento_actual(iter);
       n++;
-      void *aux = NULL;
-      if (clave_valor->clave == NULL)
-        printf("la clave es NUll\n");
-      if (clave_valor->valor == NULL)
-        printf("el valor es NUll\n");
-      printf("estoy en la lista %zu, en la posicion %zu, la clave es %p y el "
-             "valor es %p\n",
-             i, borrar_este_contador + 1, (char *)clave_valor->clave,
-             (void *)clave_valor->valor);
-      bool resultado_de_funcion =
+      // ACAif (clave_valor->clave == NULL)
+      // ACA  printf("la clave es NUll\n");
+      // ACAif (clave_valor->valor == NULL)
+      // ACA  printf("el valor es NUll\n");
+      // ACAprintf("estoy en la lista %zu, en la posicion %zu, la clave está en
+      // %p = %s y el " ACA      "valor está en %p = %d \n", ACA      i,
+      // borrar_este_contador + 1, clave_valor->clave, (char
+      // *)clave_valor->clave, ACA      (void *)clave_valor->valor,
+      // *(int*)clave_valor->valor);
+      resultado_de_funcion =
           f((char *)clave_valor->clave, clave_valor->valor, aux);
-      printf("asdf2\n");
-      if (!resultado_de_funcion)
+      // ACAprintf("asdf2\n");
+      if (!resultado_de_funcion) {
+        // ACA	printf("salgo de iterador interno\n");
         break;
-      printf("asdf3\n");
+      }
+      // ACAprintf("asdf3\n");
       lista_iterador_avanzar(iter);
-      borrar_este_contador++;
-      // printf("estoy en la lista %zu, en la posicion %zu, la clave es %s y el
-      // valor es %s\n", i, borrar_este_contador, (char*)clave_valor->clave,
-      // (char*)clave_valor->valor);
+      // ACAborrar_este_contador++;
     }
-    borrar_este_contador = 0;
+    // ACAborrar_este_contador = 0;
   }
   return n;
 }
@@ -333,7 +333,7 @@ size_t hash_04(const void *clave, size_t largo_tabla_hash) {
     p[4] = c;
 #else
     uint_fast64_t k = *data++; // originariamente decía *data++;
-//	i++;
+                               //	i++;
 #endif
 
     k *= m;
@@ -480,7 +480,7 @@ bool hash_redimensionar(hash_t *hash, bool aumenta_el_tamanio) {
     return false;
   }
   //--- copio la tabla actual en un hash aux porque hash_guardar conserva el
-  //mismo hash---//
+  // mismo hash---//
   hash_t *hash_aux = malloc(sizeof(hash_t));
   hash_aux->tabla = hash->tabla;
   hash_aux->cantidad = hash_cantidad(hash);
