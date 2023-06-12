@@ -74,7 +74,7 @@ int main()
 {
 	hash_t *garage = hash_crear(3);
 
-	printf("Agrego autos al garage\n");
+	printf("Agrego autos al garage, tamanio inicial es: %zu\n", hash_cantidad(garage));
 
 	guardar_vehiculo(garage, "AC123BD", "Auto de Mariano");
 	guardar_vehiculo(garage, "OPQ976", "Auto de Lucas");
@@ -82,10 +82,15 @@ int main()
 	guardar_vehiculo(garage, "AA442CD", "Auto de Guido");
 	guardar_vehiculo(garage, "AC152AD", "Auto de Agustina");
 	guardar_vehiculo(garage, "DZE443", "Auto de Jonathan");
+
 	guardar_vehiculo(garage, "AA436BA", "Auto de Gonzalo");
+
 	guardar_vehiculo(garage, "QDM443", "Auto de Daniela");
+
 	guardar_vehiculo(garage, "BD123AC", "Auto de Pablo");
+
 	guardar_vehiculo(garage, "CD442AA", "Auto de Micaela");
+
 	guardar_vehiculo(garage, "PQO697", "Auto de Juan");
 	guardar_vehiculo(garage, "DZE443", "Auto de Jonathan otra vez");
 	guardar_vehiculo(garage, "AC152AD", "Auto de Agustina otra vez");
@@ -98,6 +103,33 @@ int main()
 
 	verificar_vehiculo(garage, "QDM443", false);
 	verificar_vehiculo(garage, "PQO697", false);
+
+	void* busqueda = hash_obtener(garage, "AC123BD");
+	printf("resultado búsqueda: %s = %s\n", "AC123BD", (char*)busqueda);
+	busqueda = hash_obtener(garage, "OPQ976");
+	printf("resultado búsqueda: %s = %s\n", "OPQ976", (char*)busqueda);
+	busqueda = hash_obtener(garage, "A421ACB");
+	printf("resultado búsqueda: %s = %s\n", "A421ACB", (char*)busqueda);
+	busqueda = hash_obtener(garage, "AA442CD");
+	printf("resultado búsqueda: %s = %s\n", "AA442CD", (char*)busqueda);
+	busqueda = hash_obtener(garage, "AC152AD");
+	printf("resultado búsqueda: %s = %s\n", "AC152AD", (char*)busqueda);
+	busqueda = hash_obtener(garage, "DZE443");
+	printf("resultado búsqueda: %s = %s\n", "DZE443", (char*)busqueda);
+	busqueda = hash_obtener(garage, "AA436BA");
+	printf("resultado búsqueda: %s = %s\n", "AA436BA", (char*)busqueda);
+	busqueda = hash_obtener(garage, "QDM443");
+	printf("resultado búsqueda: %s = %s\n", "QDM443", (char*)busqueda);
+	busqueda = hash_obtener(garage, "BD123AC");
+	printf("resultado búsqueda: %s = %s\n", "BD123AC", (char*)busqueda);
+	busqueda = hash_obtener(garage, "CD442AA");
+	printf("resultado búsqueda: %s = %s\n", "CD442AA", (char*)busqueda);
+	busqueda = hash_obtener(garage, "PQO697");
+	printf("resultado búsqueda: %s = %s\n", "PQO697", (char*)busqueda);
+	busqueda = hash_obtener(garage, "DZE443");
+	printf("resultado búsqueda: %s = %s\n", "DZE443", (char*)busqueda);
+	busqueda = hash_obtener(garage, "AC152AD");
+	printf("resultado búsqueda: %s = %s\n", "AC152AD", (char*)busqueda);
 
 	size_t impresas = hash_con_cada_clave(garage, mostrar_patente, NULL);
 	printf("Se mostraron %zu patentes con el iterador interno\n\n",
