@@ -291,6 +291,7 @@ size_t hash_con_cada_clave(hash_t *hash,
 			lista_iterador_avanzar(iter);
 			// ACAborrar_este_contador++;
 		}
+		lista_iterador_destruir(iter);
 		// ACAborrar_este_contador = 0;
 	}
 	return n;
