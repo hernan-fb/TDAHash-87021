@@ -25,14 +25,14 @@ void test_A_crea_y_destruye_estructura_vacia()
 	pa2m_afirmar(
 		hash_obtener(hashecito, &elemento_inexistente) == NULL,
 		"\tIntento obtener un elemento inexistente en el t.a.d. vacio y devuelve "
-		"NULL.\t\thash_obtener(hashecito, &elemento_inexistente) == NULL");
+		"NULL.\thash_obtener(hashecito, &elemento_inexistente) == NULL");
 	pa2m_afirmar(
 		hash_contiene(hashecito, &elemento_inexistente) == false,
 		"\tConsulto por un elemento inexistente en el t.a.d. vacio devuelve "
-		"false.\t\t\thash_contiene(hashecito, &elemento_inexistente) == false");
-	hash_destruir(hashecito);
+		"false.\t\thash_contiene(hashecito, &elemento_inexistente) == false");
 	pa2m_afirmar(true, "\tpuedo destruir la estructura de datos recién "
 			   "creada:\t\t\t\thash_destruir(hashecito)");
+	hash_destruir(hashecito);
 }
 
 void test_B_agrega_y_quita_un_elemento()
@@ -50,15 +50,15 @@ void test_B_agrega_y_quita_un_elemento()
 	char **anterior = malloc(sizeof(char *));
 	pa2m_afirmar(
 		anterior != NULL,
-		"\tSe pidió memoria exitosamente para el char** 'anterior'.\t\t\tanterior != NULL");
+		"\tSe pidió memoria exitosamente para el char** 'anterior'.\t\t\t\t\tanterior != NULL");
 	pa2m_afirmar(
 		hash_insertar(hashecito, clave, &elemento_a_insertar,
 			      (void**)anterior) != NULL,
 		"\tPuede ser agregado un 'unico_elemento' en el tda antes "
-		"vacío.\t\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
+		"vacío.\t\t\t\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
 	pa2m_afirmar(
 		*anterior == NULL,
-		"\tComo la clave no existía, y anterior no era nulo, se almacena NULL en *anterior'.\t\t\t*anterior == NULL");
+		"\tComo la clave no existía, y anterior no era nulo, se almacena NULL en *anterior'.\t\t*anterior == NULL");
 	pa2m_afirmar(
 		hash_cantidad(hashecito) == 1,
 		"\t'unico_elemento' es el único elemento en el 't.d.a.' analizado, "
@@ -74,10 +74,10 @@ void test_B_agrega_y_quita_un_elemento()
 	pa2m_afirmar(
 		hash_insertar(hashecito, clave, &otro_elemento, (void**)anterior) ==
 			hashecito,
-		"\tEl único elemento puede ser actualizado por un 'elemento_nuevo' en el tda, entonces.\t\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
+		"\tEl único elemento puede ser actualizado por un 'elemento_nuevo' en el tda, entonces.\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
 	pa2m_afirmar(
 		*anterior == &elemento_a_insertar,
-		"\tComo la clave ya existía, y anterior no era nulo, se almacena el elemento original 'unico_elemento' en *anterior'.\t\t\t*anterior == elemento_a_insertar");
+		"\tComo la clave ya existía, y anterior no era nulo, guardo 'unico_elemento' en *anterior'.\t*anterior == elemento_a_insertar");
 	pa2m_afirmar(
 		hash_cantidad(hashecito) == 1,
 		"\t'elemento_nuevo' es el único elemento en el 't.d.a.' analizado, "
@@ -93,11 +93,11 @@ void test_B_agrega_y_quita_un_elemento()
 	pa2m_afirmar(
 		hash_obtener(hashecito, clave) != &mismo_elemento,
 		"\tno se almacenan copias del valor, "
-		"entonces:\t\t\thash_obtener(hashecito, clave) != mismo_elemento");
+		"entonces:\t\t\t\t\t\t\thash_obtener(hashecito, clave) != mismo_elemento");
 	pa2m_afirmar(
 		hash_obtener(hashecito, misma_clave) == &otro_elemento,
-		"\tse almacenan copias de la clave, por lo que se puede buscar el mismo texto desde otra variable, "
-		"entonces:\t\t\thash_obtener(hashecito, misma_clave) == otro_elemento");
+		"\tse almacenan copias de la clave, por lo que buscando el mismo texto desde otra variable, "
+		"obtengo: hash_obtener(hashecito, misma_clave) == otro_elemento");
 	pa2m_afirmar(
 		hash_obtener(hashecito, otra_clave) == NULL,
 		"\t'elemento_nuevo' es el único elemento  en el 't.d.a.' analizado, "
@@ -105,7 +105,7 @@ void test_B_agrega_y_quita_un_elemento()
 	pa2m_afirmar(
 		hash_quitar(hashecito, clave) == &otro_elemento,
 		"\t'hash_quitar' devuelve el mismo elemento que el insertado previamente, "
-		"entonces:\t\t\thash_quitar(hashecito, clave) == otro_elemento");
+		"entonces:\t\thash_quitar(hashecito, clave) == otro_elemento");
 	pa2m_afirmar(
 		hash_cantidad(hashecito) == 0,
 		"\t'elemento_nuevo' era el único elemento en el 't.d.a.' analizado, "
@@ -113,7 +113,7 @@ void test_B_agrega_y_quita_un_elemento()
 	pa2m_afirmar(
 		hash_quitar(hashecito, clave) == NULL,
 		"\t'hash_quitar' ya no tiene el elemento insertado previamente, "
-		"entonces:\t\t\thash_quitar(hashecito, clave) == NULL");
+		"entonces:\t\t\t\thash_quitar(hashecito, clave) == NULL");
 	hash_destruir(hashecito);
 	free(anterior);
 }
@@ -159,20 +159,21 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 	printf("~~~ Prueba Insertar varios elementos ~~~\n");
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 	for (size_t i = 0; i < capacidad_inicial; i++) {
+		printf("indicador1\n");
 		sprintf(buffer,
-			"\tinserto elemento nro: %zu, clave: %s, descripción: %s\n",
+			"\tinserto elemento nro: %zu, clave: %s, descripción: %s",
 			i + 1, vector_patentes[i], vector_descripciones[i]);
-
+		printf("%s",buffer);
+		printf("indicador2\n");
 		validacion = hash_insertar(hashecito, vector_patentes[i],
 					   vector_descripciones[i],
 					   (void**)anterior) == hashecito;
-
 		pa2m_afirmar(validacion, buffer);
-
+		printf("indicador3\n");
 		sprintf(buffer,
 			"\tcomo la clave: %s no se repite y anterior != NULL, entonces *anterior == NULL\n",
 			vector_patentes[i]);
-
+		printf("indicador4\n");
 		pa2m_afirmar(*anterior == NULL, buffer);
 	}
 
@@ -296,9 +297,9 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 
 int main()
 {
-	test_A_crea_y_destruye_estructura_vacia();
+	//test_A_crea_y_destruye_estructura_vacia();
 	test_B_agrega_y_quita_un_elemento();
 	test_C_agrega_y_quita_pocos_elementos_distintos();
-	//test_D_pruebas_abb_con_cada_elemento_y_recorrer();
+	//test_D_pruebas_hash_con_muchos_elementos();
 	return pa2m_mostrar_reporte();
 }

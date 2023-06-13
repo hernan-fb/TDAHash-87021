@@ -30,11 +30,31 @@ En general para todo el código: utilice nombres claros de variables y funciones
 
 ## Parte teórica
 
-Explicá teóricamente (y por favor usando diagramas):
+1. Qué es un diccionario:
 
-   - Qué es un diccionario
-   - Qué es una función de hash y qué características debe tener
-   - Qué es una tabla de Hash y los diferentes métodos de resolución de colisiones vistos (encadenamiento, probing, zona de desborde)
+Un diccionario es una estructura de datos que permite almacenar y recuperar elementos asociados a una clave. Cada elemento del diccionario consiste en un par clave-valor, donde la clave es única y se utiliza para acceder al valor correspondiente. El diccionario se organiza de manera que la búsqueda y recuperación de elementos se realicen de manera eficiente.
+
+2. Qué es una función de hash y qué características debe tener:
+
+Una función de hash es una función que toma un valor de entrada (clave) y produce una salida (valor hash) de tamaño fijo. Su objetivo es mapear datos de manera eficiente y uniforme a un espacio de claves más pequeño, generalmente un arreglo o tabla. Las características que debe tener una función de hash son:
+
+Determinismo: Dada una misma clave, la función de hash debe producir siempre el mismo valor hash.
+Uniformidad: La función de hash debe distribuir los valores de entrada de manera uniforme en el espacio de claves, minimizando las colisiones.
+Eficiencia: La función de hash debe ser computacionalmente eficiente para calcular el valor hash.
+
+3. Qué es una tabla de hash y los diferentes métodos de resolución de colisiones:
+
+Una tabla de hash es una estructura de datos que utiliza una función de hash para almacenar y recuperar elementos de manera eficiente. Consiste en un arreglo de tamaño fijo, donde cada posición del arreglo se denomina "bucket" o "casillero". Cada bucket puede contener uno o más elementos, y la función de hash se utiliza para determinar la posición de un elemento en la tabla.
+
+Cuando dos elementos tienen el mismo valor hash y deben ser almacenados en el mismo bucket, se produce una colisión. Existen diferentes métodos para resolver las colisiones:
+
+Encadenamiento: Cada bucket contiene una estructura de datos (generalmente una lista enlazada) que almacena los elementos que colisionan en esa posición. Los elementos con la misma clave se enlazan en la lista, permitiendo el acceso y recuperación de elementos eficientemente.
+
+Probing (sondeo): Cuando se produce una colisión, se busca el siguiente bucket vacío en la tabla de hash para almacenar el elemento. Hay diferentes métodos de probing, como el "linear probing" (sondeo lineal) que busca el siguiente bucket de forma secuencial, o el "quadratic probing" (sondeo cuadrático) que utiliza una función cuadrática para encontrar el siguiente bucket.
+
+Zona de desborde (overflow area): Se reserva una zona adicional en la tabla de hash para almacenar los elementos que colisionan. Cuando se produce una colisión, el elemento se almacena en la zona de desborde, lo que evita la necesidad de buscar un bucket vacío. Esta zona puede ser una estructura de datos separada, como un árbol, lista enlazada u otra tabla de hash.
+
+Cada método de resolución de colisiones tiene sus ventajas y desventajas en términos de eficiencia y uso de memoria. La elección del método adecuado depende de factores como
 
 
 ## Criterios mínimos de corrección
