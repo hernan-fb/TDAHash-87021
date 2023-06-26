@@ -31,7 +31,7 @@ void test_A_crea_y_destruye_estructura_vacia()
 		"\tConsulto por un elemento inexistente en el t.a.d. vacio devuelve "
 		"false.\t\thash_contiene(hashecito, &elemento_inexistente) == false");
 	pa2m_afirmar(true, "\tpuedo destruir la estructura de datos recién "
-			   "creada:\t\t\t\thash_destruir(hashecito)"); 
+			   "creada:\t\t\t\thash_destruir(hashecito)");
 	hash_destruir(hashecito);
 }
 
@@ -53,7 +53,7 @@ void test_B_agrega_y_quita_un_elemento()
 		"\tSe pidió memoria exitosamente para el char** 'anterior'.\t\t\t\t\tanterior != NULL");
 	pa2m_afirmar(
 		hash_insertar(hashecito, clave, &elemento_a_insertar,
-			      (void**)anterior) != NULL,
+			      (void **)anterior) != NULL,
 		"\tPuede ser agregado un 'unico_elemento' en el tda antes "
 		"vacío.\t\t\t\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
 	pa2m_afirmar(
@@ -72,8 +72,8 @@ void test_B_agrega_y_quita_un_elemento()
 		"\t'unico_elemento' es el único elemento  en el 't.d.a.' analizado, "
 		"entonces:\t\t\thash_obtener(hashecito, clave) == elemento_a_insertar");
 	pa2m_afirmar(
-		hash_insertar(hashecito, clave, &otro_elemento, (void**)anterior) ==
-			hashecito,
+		hash_insertar(hashecito, clave, &otro_elemento,
+			      (void **)anterior) == hashecito,
 		"\tEl único elemento puede ser actualizado por un 'elemento_nuevo' en el tda, entonces.\t\thash_insertar(hashecito, clave, &elemento_a_insertar, anterior) != NULL");
 	pa2m_afirmar(
 		*anterior == &elemento_a_insertar,
@@ -164,7 +164,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 			i + 1, vector_patentes[i], vector_descripciones[i]);
 		validacion = hash_insertar(hashecito, vector_patentes[i],
 					   vector_descripciones[i],
-					   (void**)anterior) == hashecito;
+					   (void **)anterior) == hashecito;
 		pa2m_afirmar(validacion, buffer);
 		sprintf(buffer,
 			"\tcomo la clave: %s no se repite y anterior != NULL, entonces *anterior == NULL\n",
@@ -182,7 +182,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 		"entonces:\t\t\thash_cantidad(hashecito) == 10");
 
 	validacion = true;
-	char* auxiliar = NULL;
+	char *auxiliar = NULL;
 	for (size_t i = 0; i < capacidad_inicial; i++) {
 		auxiliar = hash_obtener(hashecito, vector_patentes[i]);
 
@@ -191,7 +191,6 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 		sprintf(buffer,
 			"\tBuscar el elemento nro: %zu, me brinda la descripción esperada y de hecho comparo los punteros y son iguales.\n",
 			i + 1);
-
 
 		pa2m_afirmar(validacion, buffer);
 	}
@@ -203,7 +202,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 	pa2m_afirmar(
 		hash_insertar(hashecito, vector_patentes[capacidad_inicial],
 			      vector_descripciones[capacidad_inicial],
-			      (void**)anterior) == hashecito,
+			      (void **)anterior) == hashecito,
 		"\tHaber insertado un par clave-valor produce internamente la redimensión del hash. Esto se realiza satisfactoriamente");
 
 	validacion = true;
@@ -231,7 +230,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 			(hash_insertar(hashecito,
 				       vector_patentes_que_cambian_duenio[i],
 				       vector_nuevas_descripciones[i],
-				       (void**)anterior) == hashecito);
+				       (void **)anterior) == hashecito);
 		pa2m_afirmar(validacion, buffer);
 
 		sprintf(buffer,
@@ -262,9 +261,9 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 				vector_nuevas_descripciones[i - 4] :
 				vector_descripciones[i]);
 		validacion = (hash_quitar(hashecito, vector_patentes[i]) ==
-					      ((i == 4 || i == 5) ?
-				      vector_nuevas_descripciones[i - 4] :
-				      vector_descripciones[i]));
+			      ((i == 4 || i == 5) ?
+				       vector_nuevas_descripciones[i - 4] :
+				       vector_descripciones[i]));
 		pa2m_afirmar(validacion, buffer);
 
 		sprintf(buffer,

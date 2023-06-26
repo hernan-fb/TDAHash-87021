@@ -62,8 +62,9 @@ hash_t *hash_crear(size_t capacidad)
 	if (hash == NULL) {
 		return NULL;
 	}
-	hash->tamanio = capacidad < CAPACIDAD_INICIAL_TABLA_HASH ? CAPACIDAD_INICIAL_TABLA_HASH :
-					capacidad;
+	hash->tamanio = capacidad < CAPACIDAD_INICIAL_TABLA_HASH ?
+				CAPACIDAD_INICIAL_TABLA_HASH :
+				capacidad;
 	hash->cantidad = 0;
 	hash->tabla = calloc(hash->tamanio, sizeof(lista_t **));
 
@@ -226,16 +227,19 @@ void hash_destruir_todo(hash_t *hash, void (*destructor)(void *))
 	for (size_t i = 0; i < hash->tamanio; i++) {
 		bucket = hash->tabla[i];
 		lista_iterador_t *iter = lista_iterador_crear(bucket);
-		while (hash->cantidad>0 && lista_iterador_tiene_siguiente(iter)) {
+		while (hash->cantidad > 0 &&
+		       lista_iterador_tiene_siguiente(iter)) {
 			clave_valor_t *clave_valor =
 				lista_iterador_borrar(iter);
 			if (destructor)
 				destructor(clave_valor->valor);
-			if (clave_valor) destruir_estructura_clave_pero_no_el_valor(clave_valor);
+			if (clave_valor)
+				destruir_estructura_clave_pero_no_el_valor(
+					clave_valor);
 			hash->cantidad--;
 		}
 		lista_iterador_destruir(iter);
-			lista_destruir(bucket);
+		lista_destruir(bucket);
 	}
 	free(hash->tabla);
 	free(hash);
