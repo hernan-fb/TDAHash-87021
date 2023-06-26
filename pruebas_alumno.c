@@ -285,6 +285,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	printf("~~~ Prueba Destruccion t.d.a. ~~~\n");
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+	free(anterior);
 	hash_destruir(hashecito);
 	pa2m_afirmar(
 		true,
