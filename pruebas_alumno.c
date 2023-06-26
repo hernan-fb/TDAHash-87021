@@ -31,7 +31,7 @@ void test_A_crea_y_destruye_estructura_vacia()
 		"\tConsulto por un elemento inexistente en el t.a.d. vacio devuelve "
 		"false.\t\thash_contiene(hashecito, &elemento_inexistente) == false");
 	pa2m_afirmar(true, "\tpuedo destruir la estructura de datos recién "
-			   "creada:\t\t\t\thash_destruir(hashecito)");
+			   "creada:\t\t\t\thash_destruir(hashecito)"); 
 	hash_destruir(hashecito);
 }
 
@@ -159,21 +159,16 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 	printf("~~~ Prueba Insertar varios elementos ~~~\n");
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 	for (size_t i = 0; i < capacidad_inicial; i++) {
-		printf("indicador1\n");
 		sprintf(buffer,
-			"\tinserto elemento nro: %zu, clave: %s, descripción: %s",
+			"\tinserto elemento nro: %zu, clave: %s, descripción: %s\n",
 			i + 1, vector_patentes[i], vector_descripciones[i]);
-		printf("%s",buffer);
-		printf("indicador2\n");
 		validacion = hash_insertar(hashecito, vector_patentes[i],
 					   vector_descripciones[i],
 					   (void**)anterior) == hashecito;
 		pa2m_afirmar(validacion, buffer);
-		printf("indicador3\n");
 		sprintf(buffer,
 			"\tcomo la clave: %s no se repite y anterior != NULL, entonces *anterior == NULL\n",
 			vector_patentes[i]);
-		printf("indicador4\n");
 		pa2m_afirmar(*anterior == NULL, buffer);
 	}
 
@@ -187,13 +182,16 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 		"entonces:\t\t\thash_cantidad(hashecito) == 10");
 
 	validacion = true;
+	char* auxiliar = NULL;
 	for (size_t i = 0; i < capacidad_inicial; i++) {
-		sprintf(buffer,
-			"\tBuscar el elemento nro: %zu, clave: %s, me brinda la descripción correspondiente: %s\n",
-			i + 1, vector_patentes[i], vector_descripciones[i]);
+		auxiliar = hash_obtener(hashecito, vector_patentes[i]);
 
-		validacion = hash_obtener(hashecito, vector_patentes[i]) ==
-			     &vector_descripciones[i];
+		validacion = auxiliar == vector_descripciones[i];
+
+		sprintf(buffer,
+			"\tBuscar el elemento nro: %zu, me brinda la descripción esperada y de hecho comparo los punteros y son iguales.\n",
+			i + 1);
+
 
 		pa2m_afirmar(validacion, buffer);
 	}
@@ -211,8 +209,8 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 	validacion = true;
 	for (size_t i = 0; i < capacidad_inicial + 1; i++) {
 		sprintf(buffer,
-			"\tHaber redimensionado no afecta los pares guardados previamente. El elemento nro: %zu, clave: %s, me brinda la descripción correspondiente: %s\n",
-			i + 1, vector_patentes[i], vector_descripciones[i]);
+			"\tHaber redimensionado no afecta los pares guardados previamente. El elemento nro: %zu, sigue estando presente en el hash.\n",
+			i + 1);
 
 		validacion = hash_contiene(hashecito, vector_patentes[i]) ==
 			     true;
@@ -237,8 +235,7 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 		pa2m_afirmar(validacion, buffer);
 
 		sprintf(buffer,
-			"\ty como anterior != NULL, *anterior ahora apunta a la descripción inicial %s\n",
-			vector_descripciones[i + 4]);
+			"\ty como anterior != NULL, *anterior ahora apunta a la descripción inicial.\n");
 		validacion = (*anterior == vector_descripciones[i + 4]);
 		pa2m_afirmar(validacion, buffer);
 
@@ -297,9 +294,8 @@ void test_C_agrega_y_quita_pocos_elementos_distintos()
 
 int main()
 {
-	//test_A_crea_y_destruye_estructura_vacia();
+	test_A_crea_y_destruye_estructura_vacia();
 	test_B_agrega_y_quita_un_elemento();
 	test_C_agrega_y_quita_pocos_elementos_distintos();
-	//test_D_pruebas_hash_con_muchos_elementos();
 	return pa2m_mostrar_reporte();
 }

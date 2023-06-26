@@ -6,15 +6,9 @@
 #include <string.h>
 
 #define FACTOR_CARGA_MAXIMO 0.7F
-
 #define CAPACIDAD_INICIAL_TABLA_HASH 3
-//			 b = 1		b = 2		 b = 3		b = 4
-// h = 4	  97%		 99%	     99.9%		99.9%
-// h = 3	  91%		 97%	     98%		99.9%
-// h = 2	  49%		 86%	     93%		96%
 #define CAPACIDAD_BUCKETS 3 // : b
 #define CANTIDAD_DE_FUNCIONES_HASH 2 // : h
-// #define FACTOR_DE_CARGA_MAXIMO 0.97F
 #define COEFICIENTE_REDIMENSION_POR_FACTOR_DE_CARGA 0.5
 #define LARGO_LISTADO_NUMERO_PRIMOS 7
 #define FUNCION_HASH_UTILIZADA 1
@@ -40,7 +34,6 @@ typedef struct nodo {
 struct clave_valor {
 	void *clave;
 	void *valor;
-	// size_t numero_hash;
 };
 
 struct hash {
@@ -51,7 +44,6 @@ struct hash {
 struct hash_iter {
 	const hash_t *hash;
 	size_t indice_lista_actual;
-	// clave_valor_t* actual;
 	lista_iterador_t *iter_posicion_actual;
 };
 struct lista {
@@ -61,7 +53,6 @@ struct lista {
 };
 struct lista_iterador {
 	nodo_t *actual;
-	// nodo_t* previo;
 	lista_t *lista;
 };
 
@@ -71,10 +62,10 @@ hash_t *hash_crear(size_t capacidad)
 	if (hash == NULL) {
 		return NULL;
 	}
-	hash->tamanio = capacidad < 3 ? CAPACIDAD_INICIAL_TABLA_HASH :
+	hash->tamanio = capacidad < CAPACIDAD_INICIAL_TABLA_HASH ? CAPACIDAD_INICIAL_TABLA_HASH :
 					capacidad;
 	hash->cantidad = 0;
-	hash->tabla = calloc(sizeof(lista_t *), CAPACIDAD_INICIAL_TABLA_HASH);
+	hash->tabla = calloc(hash->tamanio, sizeof(lista_t **));
 
 	if (hash->tabla == NULL) {
 		free(hash);
@@ -83,9 +74,6 @@ hash_t *hash_crear(size_t capacidad)
 	for (size_t i = 0; i < hash->tamanio; ++i) {
 		hash->tabla[i] = lista_crear();
 	}
-	for (size_t i = 0; i < hash->tamanio; i++) {
-		printf("lista creada, pos i: %zu, lista->tam: %zu\n", i, hash->tabla[i]->tam);
-	}
 
 	return hash;
 }
@@ -93,7 +81,6 @@ hash_t *hash_crear(size_t capacidad)
 lista_iterador_t *hash_buscar(const hash_t *hash, const char *clave)
 {
 	clave_valor_t *actual;
-	// for (size_t i = 0; i < CANTIDAD_DE_FUNCIONES_HASH; i++){
 	if (!hash || !clave) {
 		return NULL;
 	}
@@ -111,7 +98,6 @@ lista_iterador_t *hash_buscar(const hash_t *hash, const char *clave)
 		lista_iterador_avanzar(iter);
 	}
 	lista_iterador_destruir(iter);
-	//}
 	return NULL;
 }
 
@@ -149,7 +135,6 @@ hash_t *hash_insertar(hash_t *hash, const char *clave, void *elemento,
 	}
 	strcpy(clave_valor->clave, clave);
 	clave_valor->valor = elemento;
-	// ACAprintf("tamanio actual: %zu\n", hash->tamanio);
 	if (!chequear_factor_de_carga_y_redimensionar(hash, true)) {
 		return NULL;
 	}
@@ -168,7 +153,6 @@ hash_t *hash_guardar_clave_valor(hash_t *hash, clave_valor_t *clave_valor)
 		hash->tabla[resultado_hash] = lista_crear();
 	}
 	hash->cantidad++;
-	// ACAprintf("incremento cantidad ahora es: %zu\n", hash_cantidad(hash));
 	if (lista_insertar_en_posicion(
 		    hash->tabla[resultado_hash], clave_valor,
 		    lista_tamanio(hash->tabla[resultado_hash]))) {
@@ -239,25 +223,20 @@ void hash_destruir_todo(hash_t *hash, void (*destructor)(void *))
 	if (!hash)
 		return;
 	lista_t *bucket;
-	printf("leeA\n");
 	for (size_t i = 0; i < hash->tamanio; i++) {
 		bucket = hash->tabla[i];
-		printf("leeB\n");
 		lista_iterador_t *iter = lista_iterador_crear(bucket);
-		while (lista_iterador_tiene_siguiente(iter)) {
-			printf("leeC %s\n", lista_iterador_tiene_siguiente(iter)?"true":"false");
+		while (hash->cantidad>0 && lista_iterador_tiene_siguiente(iter)) {
 			clave_valor_t *clave_valor =
 				lista_iterador_borrar(iter);
-			printf("clave_valor: %p\n", (void*)clave_valor);
 			if (destructor)
 				destructor(clave_valor->valor);
 			if (clave_valor) destruir_estructura_clave_pero_no_el_valor(clave_valor);
+			hash->cantidad--;
 		}
-		printf("leeD\n");
 		lista_iterador_destruir(iter);
-		lista_destruir(bucket);
+			lista_destruir(bucket);
 	}
-	printf("leeE\n");
 	free(hash->tabla);
 	free(hash);
 }
@@ -270,40 +249,22 @@ size_t hash_con_cada_clave(hash_t *hash,
 	if (!hash || !f)
 		return n;
 	lista_t *bucket;
-	// ACAprintf("iterador interno\n");
-	// ACAsize_t borrar_este_contador = 0;
 	bool resultado_de_funcion = true;
 	for (size_t i = 0; i < hash->tamanio && resultado_de_funcion; i++) {
 		bucket = hash->tabla[i];
 		lista_iterador_t *iter = lista_iterador_crear(bucket);
-		// ACAprintf("asdf0\n");
 		while (lista_iterador_tiene_siguiente(iter)) {
-			// ACAprintf("asdf1\n");
 			clave_valor_t *clave_valor =
 				lista_iterador_elemento_actual(iter);
 			n++;
-			// ACAif (clave_valor->clave == NULL)
-			// ACA  printf("la clave es NUll\n");
-			// ACAif (clave_valor->valor == NULL)
-			// ACA  printf("el valor es NUll\n");
-			// ACAprintf("estoy en la lista %zu, en la posicion %zu, la clave está en
-			// %p = %s y el " ACA      "valor está en %p = %d \n", ACA      i,
-			// borrar_este_contador + 1, clave_valor->clave, (char
-			// *)clave_valor->clave, ACA      (void *)clave_valor->valor,
-			// *(int*)clave_valor->valor);
 			resultado_de_funcion = f((char *)clave_valor->clave,
 						 clave_valor->valor, aux);
-			// ACAprintf("asdf2\n");
 			if (!resultado_de_funcion) {
-				// ACA	printf("salgo de iterador interno\n");
 				break;
 			}
-			// ACAprintf("asdf3\n");
 			lista_iterador_avanzar(iter);
-			// ACAborrar_este_contador++;
 		}
 		lista_iterador_destruir(iter);
-		// ACAborrar_este_contador = 0;
 	}
 	return n;
 }
@@ -499,10 +460,7 @@ bool chequear_factor_de_carga_y_redimensionar(hash_t *hash,
 					      bool aumenta_el_tamanio)
 {
 	int aux = (int)hash_cantidad(hash);
-	// ACAprintf("hash_cantidad actual: %d\n", aux);
 	float factor_de_carga = (float)aux / (float)hash->tamanio;
-	// ACAprintf("factor_de_carga actual: %f\n", factor_de_carga);
-	// ACAprintf("factor_de_carga maximo: %f\n", FACTOR_CARGA_MAXIMO);
 
 	if (aumenta_el_tamanio && factor_de_carga > FACTOR_CARGA_MAXIMO) {
 		return hash_redimensionar(hash, true);
@@ -526,9 +484,7 @@ bool chequear_factor_de_carga_y_redimensionar(hash_t *hash,
 bool hash_redimensionar(hash_t *hash, bool aumenta_el_tamanio)
 {
 	size_t nuevo_tamanio;
-	// ACAprintf("\nredimensionando del tamanio %zu  ", hash->tamanio);
 	nuevo_tamanio = calcula_nuevo_tamanio(hash, aumenta_el_tamanio);
-	// ACAprintf("al tamanio %zu\n", nuevo_tamanio);
 	lista_t **nueva_tabla = calloc(nuevo_tamanio, sizeof(lista_t *));
 	if (!nueva_tabla) {
 		return false;
